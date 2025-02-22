@@ -33,9 +33,22 @@ func FindClientsWithLargeDeposits(clients []Client, biggerThan float64) []Client
 	}
 	return result
 }
+func output(clientsWithLargeDeposits, clients []Client) {
+	if len(clientsWithLargeDeposits) == 0 {
+		fmt.Println("Депозитів немає")
+		return
+	}
+	fmt.Println("Клієнти з депозитами понад 50 000:")
+	for _, client := range clientsWithLargeDeposits {
+		fmt.Println(client.Name)
+	}
 
-func main() {
-
+	for _, client := range clients {
+		income := client.CalculateIncome()
+		fmt.Printf("Загальний дохід клієнта %s: %.2f\n", client.Name, income)
+	}
+}
+func input() []Client {
 	deposit1 := DepositType{"Депозит 1", 5.0}
 	deposit2 := DepositType{"Депозит 2", 7.0}
 
@@ -59,17 +72,12 @@ func main() {
 		},
 	}
 
-	clients := []Client{client1, client2, client3}
+	return []Client{client1, client2, client3}
+}
 
+func main() {
+
+	clients := input()
 	clientsWithLargeDeposits := FindClientsWithLargeDeposits(clients, 50000)
-
-	fmt.Println("Клієнти з депозитами понад 50 000:")
-	for _, client := range clientsWithLargeDeposits {
-		fmt.Println(client.Name)
-	}
-
-	for _, client := range clients {
-		income := client.CalculateIncome()
-		fmt.Printf("Загальний дохід клієнта %s: %.2f\n", client.Name, income)
-	}
+	output(clientsWithLargeDeposits, clients)
 }
