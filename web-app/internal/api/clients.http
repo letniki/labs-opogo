@@ -6,18 +6,20 @@ POST http://localhost:8081/api/v1/deposits
 Content-Type: application/json
 
 {
+  "id": 1,
   "name": "Electronics2",
   "rate": 20.0
 }
 
 ### Отримати клієнта за ID
-GET http://localhost:8081/api/v1/persons/1
+GET http://localhost:8081/api/v1/persons/18
 
 ### Створити нового клієнта
 POST http://localhost:8081/api/v1/persons
 Content-Type: application/json
 
 {
-  "name": "Electronics",
-  "deposit_id": 1
+  "id" : 18,
+  "name": "txrdytfugu",
+  "depositId": 1
 }

@@ -6,6 +6,7 @@ import (
 	"github.com/letniki/labs-opogo/internal"
 	"github.com/letniki/labs-opogo/internal/adapters/postgres"
 	"github.com/letniki/labs-opogo/internal/ports/ftp"
+	_ "github.com/lib/pq"
 	"log"
 	"testing"
 )

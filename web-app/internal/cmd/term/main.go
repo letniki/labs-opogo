@@ -56,7 +56,7 @@ func generateDeposits(ctx context.Context, db *sql.DB) ([]int, error) {
 		name := fmt.Sprintf("Deposit_%d", i)
 		rate := rand.Float64() * 20 // Випадковий ставка від 0 до 20
 		var id int
-		err := db.QueryRowContext(ctx, "INSERT INTO deposits (name, rate) VALUES ($1, $2) RETURNING id", name, rate).Scan(&id)
+		err := db.QueryRowContext(ctx, `INSERT INTO deposits (name, rate) VALUES ($1, $2) RETURNING id`, name, rate).Scan(&id)
 		if err != nil {
 			return nil, err
 		}
@@ -71,7 +71,7 @@ func generatePersons(ctx context.Context, db *sql.DB, depositIDs []int) error {
 	for i := 1; i <= numPersons; i++ {
 		name := fmt.Sprintf("Person_%d", i)
 
-		_, err := db.ExecContext(ctx, "INSERT INTO persons (id, name, deposit_id) VALUES ($1, $2, $3)", name, depositIDs)
+		_, err := db.ExecContext(ctx, `INSERT INTO persons (id, name, deposit_id) VALUES ($1, $2, $3)`, name, depositIDs)
 		if err != nil {
 			return err
 		}
@@ -82,7 +82,7 @@ func generatePersons(ctx context.Context, db *sql.DB, depositIDs []int) error {
 
 func exportToCSV(ctx context.Context, db *sql.DB) error {
 	rows, err := db.QueryContext(ctx, `
-		SELECT p.id, p.name, c.name AS deposit, c.rate
+		SELECT p.id, p.name, c.name AS depositId, c.rate
 		FROM persons p
 		JOIN deposits c ON p.deposit_id = c.id
 	`)
@@ -101,22 +101,23 @@ func exportToCSV(ctx context.Context, db *sql.DB) error {
 	defer writer.Flush()
 
 	// Записуємо заголовки
-	writer.Write([]string{"ID", "Person Name", "Deposit", "Rate"})
+	writer.Write([]string{"ID", "Person Name", "DepositId", "Rate"})
 
 	// Записуємо дані
 	for rows.Next() {
 		var id int
-		var personName, deposit string
+		var personName string
+		var depositId int
 		var rate float64
 
-		if err := rows.Scan(&id, &personName, &deposit, &rate); err != nil {
+		if err := rows.Scan(&id, &personName, &depositId, &rate); err != nil {
 			return err
 		}
 
 		record := []string{
 			strconv.Itoa(id),
 			personName,
-			deposit,
+			strconv.Itoa(depositId),
 			fmt.Sprintf("%.2f", rate),
 		}
 		writer.Write(record)
