@@ -87,7 +87,7 @@ func (p Parser) parse(r *csv.Reader) ([]internal.DepositType, []internal.Person,
 	return deposits, persons, nil
 }
 
-var supportedHeader = []string{"ID", "Person Name", "Deposit", "Rate"}
+var supportedHeader = []string{"id", "name", "depositId"}
 
 func (p Parser) parseHeader(r *csv.Reader) error {
 	row, err := r.Read()

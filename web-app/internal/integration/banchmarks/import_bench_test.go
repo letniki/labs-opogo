@@ -33,7 +33,7 @@ func BenchmarkProductsImport(b *testing.B) {
 }
 
 func newDB() (*sqlx.DB, error) {
-	dsn := "postgres://postgres:12345@localhost:5432/postgres?sslmode=disable&search_path=persons"
+	dsn := "postgres://postgres:12345@localhost:5432/postgres?sslmode=disable"
 	conn, err := sqlx.Connect("postgres", dsn)
 	if err != nil {
 		return nil, err

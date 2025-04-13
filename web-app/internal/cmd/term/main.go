@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	connStr     = "postgres://postgres:12345@localhost:5432/postgres?sslmode=disable&search_path=persons"
+	connStr     = "postgres://postgres:12345@localhost:5432/postgres?sslmode=disable"
 	numDeposits = 20
 	numPersons  = 10000
 	csvFilePath = "clients.csv"

@@ -1,4 +1,4 @@
-package generate
+package main
 
 import (
 	"encoding/csv"
@@ -8,8 +8,8 @@ import (
 	"strconv"
 )
 
-var categories = []string{"Їжа", "Оренда", "Канцелярія", "Інше"}
-var names = []string{"Кава", "Хліб", "Папір", "Оренда офісу", "Шафа", "Мило", "Ручка"}
+var categories = []string{"Зростаючий", "Строковий", "Інше"}
+var names = []string{"Вася", "Петя", "Коля", "Дима", "Саша"}
 
 func main() {
 	file, err := os.Create("import.csv")
@@ -21,10 +21,10 @@ func main() {
 	writer := csv.NewWriter(file)
 	defer writer.Flush()
 
-	writer.Write([]string{"amount", "note", "type_name", "type_category"})
+	writer.Write([]string{"rate", "name", "type_deposit"})
 
 	for i := 0; i < 10000; i++ {
-		amount := rand.Intn(2000) - 1000
+		amount := rand.Intn(30)
 		note := "Примітка " + strconv.Itoa(i)
 		name := names[rand.Intn(len(names))]
 		category := categories[rand.Intn(len(categories))]
