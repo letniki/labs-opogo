@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-var categories = []string{"Зростаючий", "Строковий", "Інше"}
+var depositTypes = []string{"Зростаючий", "Строковий", "Інше"}
 var names = []string{"Вася", "Петя", "Коля", "Дима", "Саша"}
 
 func main() {
@@ -21,19 +21,19 @@ func main() {
 	writer := csv.NewWriter(file)
 	defer writer.Flush()
 
-	writer.Write([]string{"rate", "name", "type_deposit"})
+	writer.Write([]string{"rate", "note", "name", "type_deposit"})
 
 	for i := 0; i < 10000; i++ {
-		amount := rand.Intn(30)
+		rate := rand.Intn(30)
 		note := "Примітка " + strconv.Itoa(i)
 		name := names[rand.Intn(len(names))]
-		category := categories[rand.Intn(len(categories))]
+		depositTypes := depositTypes[rand.Intn(len(depositTypes))]
 
 		writer.Write([]string{
-			strconv.Itoa(amount),
+			strconv.Itoa(rate),
 			note,
 			name,
-			category,
+			depositTypes,
 		})
 	}
 	log.Println("CSV файл створено.")

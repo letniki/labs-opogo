@@ -1,10 +1,11 @@
-package term
+package main
 
 import (
 	"context"
 	"database/sql"
 	"encoding/csv"
 	"fmt"
+	_ "github.com/lib/pq"
 	"log"
 	"math/rand"
 	"os"
@@ -56,7 +57,7 @@ func generateDeposits(ctx context.Context, db *sql.DB) ([]int, error) {
 		name := fmt.Sprintf("Deposit_%d", i)
 		rate := rand.Float64() * 20 // Випадковий ставка від 0 до 20
 		var id int
-		err := db.QueryRowContext(ctx, `INSERT INTO deposits (name, rate) VALUES ($1, $2) RETURNING id`, name, rate).Scan(&id)
+		err := db.QueryRowContext(ctx, `INSERT INTO deposits (id, name, rate) VALUES ($1, $2, $3) on conflict do nothing RETURNING id`, i, name, rate).Scan(&id)
 		if err != nil {
 			return nil, err
 		}
@@ -71,7 +72,7 @@ func generatePersons(ctx context.Context, db *sql.DB, depositIDs []int) error {
 	for i := 1; i <= numPersons; i++ {
 		name := fmt.Sprintf("Person_%d", i)
 
-		_, err := db.ExecContext(ctx, `INSERT INTO persons (id, name, deposit_id) VALUES ($1, $2, $3)`, name, depositIDs)
+		_, err := db.ExecContext(ctx, `INSERT INTO persons (id, name, deposit_id) VALUES ($1, $2, $3)`, name, depositIDs[i])
 		if err != nil {
 			return err
 		}
